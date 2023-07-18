@@ -17,6 +17,7 @@ class MyService : Service() {
     private val notificationChannelID = "Permanent Notification"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
         if (Build.VERSION.SDK_INT >= VERSION_CODES.O) {
             // Create a notification channel
             val channel = NotificationChannel(
@@ -34,8 +35,8 @@ class MyService : Service() {
             notificationManager.createNotificationChannel(channel)
 
             val notificationBuilder =
-                NotificationCompat.Builder(this, notificationChannelID).setAutoCancel(false)
-                    .setOngoing(true).setContentTitle("App is running")
+                NotificationCompat.Builder(this, notificationChannelID)
+                    .setContentTitle("App is running")
                     .setContentText("Display notification even if app is closed")
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -46,25 +47,23 @@ class MyService : Service() {
 
 
             val notification = notificationBuilder.build()
-            startForeground(1, notification)
-
+           startForeground(1, notification)
         } else {
             Toast.makeText(applicationContext, "Notification not available", Toast.LENGTH_SHORT)
                 .show()
         }
 
         return super.onStartCommand(intent, flags, startId)
-        return START_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
 
-    override fun onTaskRemoved(rootIntent: Intent?) {
-        super.onTaskRemoved(rootIntent)
-        // Restart the service
-        val intent = Intent(this, MyService::class.java)
-        startService(intent)
-    }
+//    override fun onTaskRemoved(rootIntent: Intent?) {
+//        super.onTaskRemoved(rootIntent)
+//        // Restart the service
+//        val intent = Intent(this, MyService::class.java)
+//        startService(intent)
+//    }
 }
